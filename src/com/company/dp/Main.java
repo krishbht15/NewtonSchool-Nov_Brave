@@ -33,7 +33,8 @@ public class Main {
         int rej = knapsack01DP(wt, val, W, i + 1, dp);
         return dp[i][W] = Math.max(sel, rej);
     }
-//https://leetcode.com/problems/longest-common-subsequence/
+
+    //https://leetcode.com/problems/longest-common-subsequence/
     public static int lcs(String s1, String s2) {
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];
         for (int i = s1.length() - 1; i >= 0; i--) {
@@ -45,5 +46,37 @@ public class Main {
             }
         }
         return dp[0][0];
+    }
+
+    //    https://leetcode.com/problems/coin-change-2/
+    public static int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = coins[i]; j < dp.length; j++) {
+                dp[j] += dp[j - coins[i]];
+            }
+        }
+        return dp[amount];
+    }
+
+    //https://leetcode.com/problems/longest-increasing-subsequence/
+    public static int lis(int[] nums) {
+        int[] dp = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            int curr = nums[i];
+            int currLis = 1;
+            for (int j = i - 1; j >= 0; j--) {
+                if (nums[j] < curr) {
+                    currLis = Math.max(currLis, dp[j] + 1);
+                }
+            }
+            dp[i] = currLis;
+        }
+        int ans = dp[0];
+        for (int i = 1; i < dp.length; i++) {
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
     }
 }
