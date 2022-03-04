@@ -79,4 +79,49 @@ public class Main {
         }
         return ans;
     }
+
+    //    https://leetcode.com/problems/edit-distance/
+    public static int editDistance(String word1, String word2) {
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+
+        for (int i = 0; i <= word1.length(); i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i <= word2.length(); i++) {
+            dp[0][i] = i;
+        }
+
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1];
+                else {
+                    int insert = dp[i][j - 1];
+                    int delete = dp[i - 1][j];
+                    int replace = dp[i - 1][j - 1];
+                    dp[i][j] = Math.min(insert, Math.min(delete, replace)) + 1;
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
+    }
+
+    //    https://leetcode.com/problems/coin-change/
+    public static int minCoinChange(int[] coins, int amount) {
+        int[][] dp = new int[coins.length][amount + 1];
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                if (i == 0) {
+                    dp[i][j] = Integer.MAX_VALUE;
+                } else dp[i][j] = dp[i - 1][j];
+                if (j >= coins[i]) {
+                    int deductAmount = dp[i][j - coins[i]];
+                    if (deductAmount < dp[i][j]) {
+                        dp[i][j] = deductAmount + 1;
+                    }
+                }
+            }
+        }
+        return dp[coins.length - 1][amount];
+    }
 }
